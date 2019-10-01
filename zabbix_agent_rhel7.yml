@@ -2,6 +2,13 @@
 - hosts: 
   remote_user: root 
   become: yes
+  vars:
+    server:
+    listen:
+    serverport:
+    debuglevel:
+    timeout:
+    startagents:
   tasks: 
         - name: Removendo o pacote do zabbix-agent ja instalado
           yum:
@@ -33,7 +40,7 @@
                   state: installed
 
         - name: Alterando os parametros do arquivo de conf do zabbix-agent
-          action: raw sed -i "s/Hostname=Zabbix server/# Hostname=Zabbix server/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# EnableRemoteCommands=0/EnableRemoteCommands=1/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# LogRemoteCommands=0/LogRemoteCommands=1/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# DebugLevel=3/DebugLevel=3/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# ListenPort=10050/ListenPort=10050/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# HostnameItem=system.hostname/HostnameItem=system.hostname/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# HostMetadata=/HostMetadata=Linux Homologacao/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# RefreshActiveChecks=120/RefreshActiveChecks=120/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# BufferSend=5/BufferSend=5/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# BufferSize=100/BufferSize=100/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# MaxLinesPerSecond=20/MaxLinesPerSecond=20/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# Timeout=3/Timeout=30/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# AllowRoot=0/AllowRoot=0/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# User=zabbix/User=zabbix/g" /etc/zabbix/zabbix_agentd.conf
+          action: raw sed -i "s/Hostname=Zabbix server/# Hostname=Zabbix server/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# EnableRemoteCommands=0/EnableRemoteCommands=1/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# LogRemoteCommands=0/LogRemoteCommands=1/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# DebugLevel=3/DebugLevel={{debuglevel}}/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# ListenPort=10050/ListenPort={{listen}}/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# StartAgents=3/StartAgents={{startagents}}/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/Server=127.0.0.1/Server="{{server}}/g /etc/zabbix/zabbix_agentd.conf ; sed -i "s/ServerActive=127.0.0.1/ServerActive="{{server}}:{{serverport}}/g /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# HostnameItem=system.hostname/HostnameItem=system.hostname/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# RefreshActiveChecks=120/RefreshActiveChecks=120/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# BufferSend=5/BufferSend=5/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# BufferSize=100/BufferSize=100/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# MaxLinesPerSecond=20/MaxLinesPerSecond=20/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# Timeout=3/Timeout={{timeout}}/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# AllowRoot=0/AllowRoot=0/g" /etc/zabbix/zabbix_agentd.conf ; sed -i "s/# User=zabbix/User=zabbix/g" /etc/zabbix/zabbix_agentd.conf
 
         - name: Iniciando o zabbix-agent e habilitando para iniciar no boot do servidor
           service:
